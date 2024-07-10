@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+	"url": "https://hackingo.youbike.be/payloads/swagger/form.yaml",
+    "urls": [
+        {
+            "url": "https://hackingo.youbike.be/payloads/swagger/form.yaml",
+            "name": "Foo"
+        }
+    ]
+}
