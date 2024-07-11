@@ -1,0 +1,10 @@
+{
+    "swagger": "2.0",
+	"url": "https://raw.githubusercontent.com/ogaudel/payloads/main/swagger/form.yaml",
+    "urls": [
+        {
+            "url": "https://raw.githubusercontent.com/ogaudel/payloads/main/swagger/form.yaml",
+            "name": "Foo"
+        }
+    ]
+}
