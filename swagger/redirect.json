@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
   "title": "XSS Open Redirect Swagger demo",
-  "description": "Description <img onerror=window.location.replace('https://google.com'); src=1> / apres tag img. ",
+  "description": "Description <img onerror=window.location.replace('https://google.com'); src=1> / apres tag img. Lien : <a href='https://www.google.com'>Lien Google</a>",
   "termsOfService": "javascript:alert(document.cookie)",
   "version": "1.0.1"
 },
