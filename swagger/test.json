@@ -1,0 +1,10 @@
+{
+    "url": "https://raw.githubusercontent.com/ogaudel/payloads/main/swagger/test.yaml",
+    "urls": [{
+        "url": "https://raw.githubusercontent.com/ogaudel/payloads/main/swagger/test.yaml",
+        "name": "Foo"
+    },{
+        "url": "https://raw.githubusercontent.com/ogaudel/payloads/main/swagger/test2.yaml",
+        "name": "Foo2"
+    }]
+}
